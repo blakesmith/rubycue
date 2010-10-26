@@ -47,6 +47,10 @@ module RubyCue
       self.to_a == other.to_a
     end
 
+    def each
+      to_a.each {|value| yield value }
+    end
+
     private
 
     def carrying_addition(other)

@@ -221,6 +221,17 @@ describe RubyCue::Index do
       end
     end
 
+    describe "#each" do
+      it "yields each minute, second, frame value" do
+        array = []
+        index = RubyCue::Index.new([1, 30, 45])
+        index.each do |value|
+          array << value
+        end
+
+        array.to_a.should == index.to_a
+      end
+    end
 
   end
 end

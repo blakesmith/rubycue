@@ -21,7 +21,20 @@ module RubyCue
       end
     end
 
+    def position(value)
+      index = Index.new(value)
+      return @songs.first if index < @songs.first[:index]
+      @songs.each_with_index do |song, i|
+        return song if song == @songs.last
+        return song if between(song[:index], @songs[i+1][:index], index)
+      end
+    end
+
     private
+
+    def between(a, b, position_index)
+      (position_index > a) && (position_index < b)
+    end
 
     def parse_titles
       unless @titles

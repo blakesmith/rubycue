@@ -2,6 +2,7 @@ module RubyCue
   class Index
     SECONDS_PER_MINUTE = 60
     FRAMES_PER_SECOND = 75
+    FRAMES_PER_MINUTE = FRAMES_PER_SECOND * 60
 
     attr_reader :minutes, :seconds, :frames
 
@@ -27,12 +28,16 @@ module RubyCue
     end
 
     def +(other)
-      self.class.new(cascade_values(other))
+      self.class.new(carrying_addition(other))
+    end
+
+    def -(other)
+      self.class.new(carrying_subtraction(other))
     end
 
     private
 
-    def cascade_values(other)
+    def carrying_addition(other)
       minutes, seconds, frames = *[@minutes + other.minutes, 
         @seconds + other.seconds, @frames + other.frames]
 
@@ -41,9 +46,21 @@ module RubyCue
       [minutes, seconds, frames]
     end
 
-    def convert_with_rate(from, to, rate)
+    def carrying_subtraction(other)
+      seconds = minutes = 0
+
+      my_frames = @frames + (@seconds * FRAMES_PER_SECOND) + (@minutes * FRAMES_PER_MINUTE)
+      other_frames = other.frames + (other.seconds * FRAMES_PER_SECOND) + (other.minutes * FRAMES_PER_MINUTE)
+      frames = my_frames - other_frames
+
+      seconds, frames = *convert_with_rate(frames, seconds, FRAMES_PER_SECOND)
+      minutes, seconds = *convert_with_rate(seconds, minutes, SECONDS_PER_MINUTE)
+      [minutes, seconds, frames]
+    end
+
+    def convert_with_rate(from, to, rate, step=1)
       while from >= rate
-        to += 1
+        to += step
         from -= rate
       end
       [to, from]

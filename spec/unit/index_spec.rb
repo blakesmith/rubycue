@@ -112,7 +112,39 @@ describe RubyCue::Index do
           (index1 + index2).to_a.should == [0, 1, 0]
         end
       end
+
+      describe "#-" do
+        it "returns an object of Class Index" do
+          index1 = RubyCue::Index.new([0, 30, 0])
+          index2 = RubyCue::Index.new([0, 30, 0])
+
+          (index1 - index2).class.should == RubyCue::Index
+        end
+
+        it "subtracts two indices with only frames" do
+          index1 = RubyCue::Index.new([0, 0, 50])
+          index2 = RubyCue::Index.new([0, 0, 25])
+
+          (index1 - index2).to_a.should == [0, 0, 25]
+        end
+
+        it "subtracts two indices with minutes" do
+          index1 = RubyCue::Index.new([3, 20, 50])
+          index2 = RubyCue::Index.new([2, 40, 25])
+
+          (index1 - index2).to_a.should == [0, 40, 25]
+        end
+
+        it "subtracts two indices with even minutes" do
+          index1 = RubyCue::Index.new([3, 0, 0])
+          index2 = RubyCue::Index.new([2, 0, 0])
+
+          (index1 - index2).to_a.should == [1, 0, 0]
+        end
+
+      end
     end
+
 
   end
 end

@@ -20,16 +20,32 @@ describe RubyCue::Cuesheet do
       @cuesheet.songs.first[:title].should == "Intro"
     end
 
+    it "has the right last track" do
+      @cuesheet.songs.last[:title].should == "The Lotus Symphony vs. Uplifting"
+    end
+
     it "has the right first performer" do
       @cuesheet.songs.first[:performer].should == "Essential Mix"
+    end
+
+    it "has the right last performer" do
+      @cuesheet.songs.last[:performer].should == "Netsky vs. Genetic Bros"
     end
 
     it "has the right first index" do
       @cuesheet.songs.first[:index].should == [0, 0, 0]
     end
 
+    it "has the right last index" do
+      @cuesheet.songs.last[:index].should == [115, 22, 47]
+    end
+
     it "has the right first track" do
       @cuesheet.songs.first[:track].should == 1
+    end
+
+    it "has the right last track" do
+      @cuesheet.songs.last[:track].should == 53
     end
 
     it "has the right amonut of tracks" do

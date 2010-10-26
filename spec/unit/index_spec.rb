@@ -59,6 +59,59 @@ describe RubyCue::Index do
           index.to_f.should == (90 + (74 / 75.0)).to_f
         end
       end
+
+      describe "#to_i" do
+        it "converts to seconds and rounds down" do
+          index = RubyCue::Index.new([0, 30, 74])
+          index.to_i.should == 30
+        end
+      end
+
+      describe "#to_a" do
+        it "converts to an array" do
+          index = RubyCue::Index.new([1, 2, 3])
+          index.to_a.should == [1, 2, 3]
+        end
+      end
+    end
+
+    context "computations" do
+      describe "#+" do
+        it "returns an object of Class Index" do
+          index1 = RubyCue::Index.new([0, 30, 0])
+          index2 = RubyCue::Index.new([0, 30, 0])
+
+          (index1 + index2).class.should == RubyCue::Index
+        end
+
+        it "adds two indices under a minute" do
+          index1 = RubyCue::Index.new([0, 30, 0])
+          index2 = RubyCue::Index.new([0, 30, 0])
+
+          (index1 + index2).to_a.should == [1, 0, 0]
+        end
+
+        it "adds two indices over a minute" do
+          index1 = RubyCue::Index.new([1, 30, 0])
+          index2 = RubyCue::Index.new([2, 20, 0])
+
+          (index1 + index2).to_a.should == [3, 50, 0]
+        end
+
+        it "adds two indices with frames" do
+          index1 = RubyCue::Index.new([1, 30, 50])
+          index2 = RubyCue::Index.new([2, 20, 50])
+
+          (index1 + index2).to_a.should == [3, 51, 25]
+        end
+
+        it "adds two indices with only frames" do
+          index1 = RubyCue::Index.new([0, 0, 50])
+          index2 = RubyCue::Index.new([0, 0, 25])
+
+          (index1 + index2).to_a.should == [0, 1, 0]
+        end
+      end
     end
 
   end

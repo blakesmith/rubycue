@@ -1,6 +1,6 @@
 module RubyCue
   class Cuesheet
-    attr_reader :cuesheet, :tracks
+    attr_reader :cuesheet, :songs
 
     def initialize(cuesheet)
       @cuesheet = cuesheet      
@@ -13,8 +13,43 @@ module RubyCue
     end
 
     def parse!
-      @tracks = @cuesheet.scan(@reg[:title]).map{|title| {:title => title.first}}
-      @tracks.delete_at(0)
+      @songs = parse_titles.map{|title| {:title => title}}
+      @songs.each_with_index do |song, i|
+        song[:performer] = parse_performers[i]
+        song[:track] = parse_tracks[i]
+        song[:index] = parse_indices[i]
+      end
     end
+
+    private
+
+    def parse_titles
+      unless @titles
+        @titles = cuesheet_scan(:title).map{|title| title.first}
+        @titles.delete_at(0)
+      end
+      @titles
+    end
+
+    def parse_performers
+      unless @performers
+        @performers = cuesheet_scan(:performer).map{|performer| performer.first}
+        @performers.delete_at(0)
+      end
+      @performers
+    end
+
+    def parse_tracks
+      @tracks ||= cuesheet_scan(:track).map{|track| track.first.to_i}
+    end
+
+    def parse_indices
+      @indices ||= cuesheet_scan(:index).map{|index| [index[0].to_i, index[1].to_i, index[2].to_i]}
+    end
+
+    def cuesheet_scan(field)
+      @cuesheet.scan(@reg[field])
+    end
+
   end
 end

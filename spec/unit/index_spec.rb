@@ -42,5 +42,24 @@ describe RubyCue::Index do
       lambda { RubyCue::Index.new([0, "moose", 0]) }.should raise_error(ArgumentError)
     end
 
+    context "conversions" do
+      describe "#to_f" do
+        it "converts an array value under a minute" do
+          index = RubyCue::Index.new([0, 30, 0])
+          index.to_f.should == 30.0
+        end
+
+        it "converts an array value over a minute" do
+          index = RubyCue::Index.new([1, 30, 0])
+          index.to_f.should == 90.0
+        end
+
+        it "converts an array value over a minute with frames" do
+          index = RubyCue::Index.new([1, 30, 74])
+          index.to_f.should == (90 + (74 / 75.0)).to_f
+        end
+      end
+    end
+
   end
 end

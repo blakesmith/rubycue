@@ -1,7 +1,7 @@
 module RubyCue
   class Index
     SECONDS_PER_MINUTE = 60
-    FRAMES_PER_SECOND = 75
+    FRAMES_PER_SECOND = 75.0
 
     attr_reader :minutes, :seconds, :frames
 
@@ -12,6 +12,10 @@ module RubyCue
       when Integer
         set_from_integer!(value)
       end
+    end
+
+    def to_f
+      ((@minutes * SECONDS_PER_MINUTE) + (@seconds) + (@frames / FRAMES_PER_SECOND)).to_f
     end
 
     private

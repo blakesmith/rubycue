@@ -44,7 +44,7 @@ module RubyCue
     end
 
     def parse_indices
-      @indices ||= cuesheet_scan(:index).map{|index| [index[0].to_i, index[1].to_i, index[2].to_i]}
+      @indices ||= cuesheet_scan(:index).map{|index| RubyCue::Index.new([index[0].to_i, index[1].to_i, index[2].to_i])}
     end
 
     def cuesheet_scan(field)

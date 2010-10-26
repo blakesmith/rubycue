@@ -35,6 +35,18 @@ module RubyCue
       self.class.new(carrying_subtraction(other))
     end
 
+    def >(other)
+      self.to_f > other.to_f
+    end
+
+    def <(other)
+      self.to_f < other.to_f
+    end
+
+    def ==(other)
+      self.to_a == other.to_a
+    end
+
     private
 
     def carrying_addition(other)

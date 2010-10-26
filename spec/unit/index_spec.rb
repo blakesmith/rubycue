@@ -143,6 +143,82 @@ describe RubyCue::Index do
         end
 
       end
+
+      describe "#>" do
+        it "returns true for frames" do
+          index1 = RubyCue::Index.new([0, 0, 50])
+          index2 = RubyCue::Index.new([0, 0, 25])
+
+          (index1 > index2).should be_true
+        end
+
+        it "returns true for seconds" do
+          index1 = RubyCue::Index.new([0, 30, 50])
+          index2 = RubyCue::Index.new([0, 29, 25])
+
+          (index1 > index2).should be_true
+        end
+
+        it "returns true for minutes" do
+          index1 = RubyCue::Index.new([2, 30, 50])
+          index2 = RubyCue::Index.new([1, 29, 25])
+
+          (index1 > index2).should be_true
+        end
+
+        it "returns true for the same time" do
+          index1 = RubyCue::Index.new([1, 30, 50])
+          index2 = RubyCue::Index.new([1, 30, 50])
+
+          (index1 > index2).should be_false
+        end
+      end
+
+      describe "#<" do
+        it "returns false for frames" do
+          index1 = RubyCue::Index.new([0, 0, 50])
+          index2 = RubyCue::Index.new([0, 0, 25])
+
+          (index1 < index2).should be_false
+        end
+
+        it "returns false for seconds" do
+          index1 = RubyCue::Index.new([0, 30, 50])
+          index2 = RubyCue::Index.new([0, 29, 25])
+
+          (index1 < index2).should be_false
+        end
+
+        it "returns false for minutes" do
+          index1 = RubyCue::Index.new([2, 30, 50])
+          index2 = RubyCue::Index.new([1, 29, 25])
+
+          (index1 < index2).should be_false
+        end
+
+        it "returns false for the same time" do
+          index1 = RubyCue::Index.new([1, 30, 50])
+          index2 = RubyCue::Index.new([1, 30, 50])
+
+          (index1 < index2).should be_false
+        end
+      end
+
+      describe "#==" do
+        it "returns true if they're the same" do
+          index1 = RubyCue::Index.new([1, 30, 50])
+          index2 = RubyCue::Index.new([1, 30, 50])
+
+          (index1 == index2).should be_true
+        end
+        
+        it "returns false if they're not the same" do
+          index1 = RubyCue::Index.new([1, 30, 50])
+          index2 = RubyCue::Index.new([1, 30, 51])
+
+          (index1 == index2).should be_false
+        end
+      end
     end
 
 

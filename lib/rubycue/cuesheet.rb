@@ -1,8 +1,8 @@
 module RubyCue
   class Cuesheet
-    attr_reader :cuesheet, :songs
+    attr_reader :cuesheet, :songs, :track_duration
 
-    def initialize(cuesheet)
+    def initialize(cuesheet, track_duration=nil)
       @cuesheet = cuesheet      
       @reg = {
         :track => %r(TRACK (\d{1,3}) AUDIO), 
@@ -10,6 +10,7 @@ module RubyCue
         :title => %r(TITLE "(.*)"), 
         :index => %r(INDEX \d{1,3} (\d{1,3}):(\d{1,2}):(\d{1,2}))
       }
+      @track_duration = RubyCue::Index.new(track_duration) if track_duration
     end
 
     def parse!
@@ -20,6 +21,7 @@ module RubyCue
         song[:index] = parse_indices[i]
       end
       raise RubyCue::InvalidCuesheet.new("Field amounts are not all present. Cuesheet is malformed!") unless valid?
+      calculate_song_durations!
     end
 
     def position(value)
@@ -40,6 +42,16 @@ module RubyCue
     end
 
     private
+
+    def calculate_song_durations!
+      @songs.each_with_index do |song, i|
+        if song == @songs.last
+          song[:duration] = (@track_duration - song[:index]) if @track_duration
+          return
+        end
+        song[:duration] = @songs[i+1][:index] - song[:index]
+      end
+    end
 
     def between(a, b, position_index)
       (position_index > a) && (position_index < b)

@@ -49,6 +49,22 @@ describe RubyCue::Cuesheet do
       it "has the right amonut of tracks" do
         @cuesheet.songs.size.should == 53
       end
+
+      describe "#calculate_song_duration!" do
+        it "properly calculates song duration at the beginning of the track" do
+          @cuesheet.songs.first[:duration].to_a.should == [1, 50, 07]
+        end
+
+        it "properly calculates song duration in the middle of the track" do
+          @cuesheet.songs[20][:duration].to_a.should == [2, 13, 3]
+        end
+
+        it "properly calculates song duration of the last song given the user inputs the total track length" do
+          cuesheet = RubyCue::Cuesheet.new(load_cuesheet('test'), 7185)
+          cuesheet.parse!
+          cuesheet.songs.last[:duration].to_a.should == [4, 22, 28]
+        end
+      end
     end
 
     context "improperly formatted cuesheet" do
@@ -78,4 +94,5 @@ describe RubyCue::Cuesheet do
       @cuesheet.position(10000000).should == @cuesheet.songs.last
     end
   end
+
 end

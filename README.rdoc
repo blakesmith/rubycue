@@ -1,0 +1,48 @@
+= RubyCue: A library to parse cuesheet song files
+
+RubyCue is a Ruby interface for parsing and accessing cuesheet data.
+
+= Usage:
+
+=== Basic usage
+
+  require 'rubycue'
+
+  cuesheet = RubyCue::Cuesheet.new(File.read("cuesheet.cue"))
+  cuesheet.parse!
+  
+  cuesheet.songs.each do |song|
+    puts "#{song[:performer]} - #{song[:title]} at #{song[:index]}"
+  end
+
+=== Calculated Song Durations
+
+RubyCue will also calculate song durations. In order to calculate the last song's duration, you must pass the optional track duration (in seconds) for the entire file.
+
+  cuesheet = RubyCue::Cuesheet.new(File.read("cuesheet.cue"), 7143)
+
+=== Current Song Position
+
+After a cuesheet is instantiated, you can pass a current track position, and the cuesheet will return which song is currently playing at that position:
+
+  # with seconds
+  cuesheet.position(4352)
+   => {:index=>#<RubyCue::Index:0x101025240 @seconds=7, @minutes=71, @frames=31>, :track=>32, :performer=>"Netsky", :title=>"Iron Heart", :duration=>#<RubyCue::Index:0x10100f2d8 @seconds=55, @minutes=2, @frames=38>} 
+
+ # with an array [minutes, seconds, frames]
+ cuesheet.position([43, 23, 45])
+  => {:index=>#<RubyCue::Index:0x101027590 @seconds=27, @minutes=39, @frames=57>, :track=>19, :performer=>"Legion feat. Adam Wright", :title=>"Both Sides", :duration=>#<RubyCue::Index:0x101013130 @seconds=45, @minutes=4, @frames=13>} 
+
+=== Index objects
+
+Index objects are a time representation of the position in a track. They are represented with fields [minutes, seconds, frames]. There are 75 frames in each second. You can access the values of the index object like so:
+
+  index = Index.new([30, 23, 73])
+  index.minutes => 30
+  index.seconds => 23
+  index.frames => 73
+  index.to_i => 1823
+  index.to_f => 1823.97333333333
+
+There's other stuff you can do with them, check out the source for more in-depth usage.
+

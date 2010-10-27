@@ -22,6 +22,7 @@ module RubyCue
       end
       raise RubyCue::InvalidCuesheet.new("Field amounts are not all present. Cuesheet is malformed!") unless valid?
       calculate_song_durations!
+      true
     end
 
     def position(value)

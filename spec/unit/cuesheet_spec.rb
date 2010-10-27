@@ -14,6 +14,10 @@ describe RubyCue::Cuesheet do
 
   describe "#parse!" do
     context "properly formatted cuesheet" do
+      it "returns true if successfully parsed" do
+        @cuesheet.parse!.should be_true
+      end
+
       it "has the right first track" do
         @cuesheet.songs.first[:title].should == "Intro"
       end

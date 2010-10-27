@@ -13,40 +13,55 @@ describe RubyCue::Cuesheet do
   end
 
   describe "#parse!" do
-    it "has the right first track" do
-      @cuesheet.songs.first[:title].should == "Intro"
+    context "properly formatted cuesheet" do
+      it "has the right first track" do
+        @cuesheet.songs.first[:title].should == "Intro"
+      end
+
+      it "has the right last track" do
+        @cuesheet.songs.last[:title].should == "The Lotus Symphony vs. Uplifting"
+      end
+
+      it "has the right first performer" do
+        @cuesheet.songs.first[:performer].should == "Essential Mix"
+      end
+
+      it "has the right last performer" do
+        @cuesheet.songs.last[:performer].should == "Netsky vs. Genetic Bros"
+      end
+
+      it "has the right first index" do
+        @cuesheet.songs.first[:index].should == [0, 0, 0]
+      end
+
+      it "has the right last index" do
+        @cuesheet.songs.last[:index].should == [115, 22, 47]
+      end
+
+      it "has the right first track" do
+        @cuesheet.songs.first[:track].should == 1
+      end
+
+      it "has the right last track" do
+        @cuesheet.songs.last[:track].should == 53
+      end
+
+      it "has the right amonut of tracks" do
+        @cuesheet.songs.size.should == 53
+      end
     end
 
-    it "has the right last track" do
-      @cuesheet.songs.last[:title].should == "The Lotus Symphony vs. Uplifting"
-    end
+    context "improperly formatted cuesheet" do
+      it "should raise an exception for a bogus formatted cuesheet" do
+        cuesheet = RubyCue::Cuesheet.new("Something bogus")
+        lambda { cuesheet.parse! }.should raise_error(RubyCue::InvalidCuesheet)
+      end
 
-    it "has the right first performer" do
-      @cuesheet.songs.first[:performer].should == "Essential Mix"
-    end
-
-    it "has the right last performer" do
-      @cuesheet.songs.last[:performer].should == "Netsky vs. Genetic Bros"
-    end
-
-    it "has the right first index" do
-      @cuesheet.songs.first[:index].should == [0, 0, 0]
-    end
-
-    it "has the right last index" do
-      @cuesheet.songs.last[:index].should == [115, 22, 47]
-    end
-
-    it "has the right first track" do
-      @cuesheet.songs.first[:track].should == 1
-    end
-
-    it "has the right last track" do
-      @cuesheet.songs.last[:track].should == 53
-    end
-
-    it "has the right amonut of tracks" do
-      @cuesheet.songs.size.should == 53
+      it "raises an exception if all our fields don't find the same amount of items" do
+        cue = load_cuesheet('malformed')
+        cuesheet = RubyCue::Cuesheet.new(cue)
+        lambda { cuesheet.parse! }.should raise_error(RubyCue::InvalidCuesheet)
+      end
     end
   end
 

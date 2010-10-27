@@ -19,6 +19,7 @@ module RubyCue
         song[:track] = parse_tracks[i]
         song[:index] = parse_indices[i]
       end
+      raise RubyCue::InvalidCuesheet.new("Field amounts are not all present. Cuesheet is malformed!") unless valid?
     end
 
     def position(value)
@@ -27,6 +28,14 @@ module RubyCue
       @songs.each_with_index do |song, i|
         return song if song == @songs.last
         return song if between(song[:index], @songs[i+1][:index], index)
+      end
+    end
+
+    def valid?
+      @songs.all? do |song|
+        [:performer, :track, :index, :title].all? do |key|
+          song[key] != nil
+        end
       end
     end
 
@@ -61,7 +70,9 @@ module RubyCue
     end
 
     def cuesheet_scan(field)
-      @cuesheet.scan(@reg[field])
+      scan = @cuesheet.scan(@reg[field])
+      raise InvalidCuesheet.new("No fields were found for #{field.to_s}") if scan.empty?
+      scan
     end
 
   end

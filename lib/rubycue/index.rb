@@ -27,6 +27,10 @@ module RubyCue
       [@minutes, @seconds, @frames]
     end
 
+    def to_s
+      "#{'%02d' % @minutes}:#{'%02d' % @seconds}:#{'%02d' % @frames}"
+    end
+
     def +(other)
       self.class.new(carrying_addition(other))
     end

@@ -60,6 +60,12 @@ describe RubyCue::Index do
         end
       end
 
+      describe "#to_s" do
+        it "renders the index as a string with leading zeroes" do
+          index = RubyCue::Index.new([1, 30, 74]).to_s.should == "01:30:74"
+        end
+      end
+
       describe "#to_i" do
         it "converts to seconds and rounds down" do
           index = RubyCue::Index.new([0, 30, 74])

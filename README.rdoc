@@ -46,3 +46,9 @@ Index objects are a time representation of the position in a track. They are rep
 
 There's other stuff you can do with them, check out the source for more in-depth usage.
 
+=== Chapter XML
+
+Generate a chapter XML file for use with ChapterX or GarageBand/ChapterTool
+
+	chaptercue -c mycue.cue -x chapter.xml
+

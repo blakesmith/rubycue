@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), "../spec_helper")
+require 'rexml/document'
 
 describe RubyCue::Cuesheet do
   before do
@@ -97,6 +98,28 @@ describe RubyCue::Cuesheet do
     it "returns the last song if a position greater than the last index is passed" do
       @cuesheet.position(10000000).should == @cuesheet.songs.last
     end
+  end
+  
+  describe "#to_chapter_xml" do
+  	it "returns the proper chapter XML representation of the cue sheet" do
+  		xml = REXML::Document.new @cuesheet.to_chapter_xml
+  		
+  		titles=[]
+			starttimes=[]
+			
+			xml.elements.each("chapters/chapter/title") do |title|
+				titles << title.text
+			end
+			
+			xml.elements.each("chapters/chapter") do |chapter|
+				starttimes << chapter.attributes["starttime"]
+			end
+			
+			@cuesheet.songs.each_with_index do |song, i|
+				titles[i].should == "#{song[:performer]} - #{song[:title]}"
+				starttimes[i].should == "#{song[:index].minutes}:#{song[:index].seconds}"
+			end
+  	end
   end
 
 end

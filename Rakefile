@@ -16,6 +16,8 @@ begin
     gemspec.email = "blakesmith0@gmail.com"
     gemspec.homepage = "http://github.com/blakesmith/rubycue"
     gemspec.authors = ["Blake Smith"]
+    gemspec.executables = ["cuechapter"]
+    gemspec.add_dependency 'builder', '>= 3.0.0'
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: gem install jeweler"

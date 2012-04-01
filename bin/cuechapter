@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'rubycue'
+
+options = {}
+
+opts = OptionParser.new do |opts| 
+	opts.on("-c", "--cue PATH", "Path to chesheet file") do |cue_file|
+    options[:cue] = cue_file
+  end
+  
+  opts.on("-x", "--xml [PATH]", "Path to xml file") do |xml_file|
+    options[:xml] = xml_file
+  end
+  
+  opts.on("-p", "--picture [PATH]", "Path to picture") do |pic_file|
+  	options[:pic] = pic_file
+  end
+  
+  opts.on("-l", "--link [link]", "Link for chapters") do |link|
+  	options[:link] = link
+  end
+end
+
+opts.parse!
+
+@cuesheet = RubyCue::Cuesheet.new(File.read(options[:cue]))
+@cuesheet.parse!
+
+if options[:xml].nil?
+	@xml=File.path(options[:cue]).gsub(File.extname(options[:cue]),".xml")
+else
+	@xml = options[:xml]
+end
+
+File.open(@xml, 'w') { |f| f.write(@cuesheet.to_chapter_xml(options[:pic],options[:link])) }

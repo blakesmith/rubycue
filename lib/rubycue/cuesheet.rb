@@ -1,3 +1,5 @@
+require 'builder'
+
 module RubyCue
   class Cuesheet
     attr_reader :cuesheet, :songs, :track_duration
@@ -40,6 +42,20 @@ module RubyCue
           song[key] != nil
         end
       end
+    end
+    
+    def to_chapter_xml(picture=nil, link=nil)
+      xml = Builder::XmlMarkup.new(:indent => 2)
+
+      xml.chapters("version" => "1") {
+        @songs.each do |song|
+          xml.chapter("starttime" => "#{song[:index].minutes}:#{song[:index].seconds}") {
+            xml.title "#{song[:performer]} - #{song[:title]}"
+            xml.picture "#{picture}"
+            xml.link "#{link}"
+          }
+        end
+      }
     end
 
     private

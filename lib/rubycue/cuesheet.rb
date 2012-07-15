@@ -1,6 +1,6 @@
 module RubyCue
   class Cuesheet
-    attr_reader :cuesheet, :songs, :track_duration
+    attr_reader :cuesheet, :songs, :track_duration, :performer, :title
 
     def initialize(cuesheet, track_duration=nil)
       @cuesheet = cuesheet      
@@ -42,7 +42,7 @@ module RubyCue
       end
     end
 
-    private
+  private
 
     def calculate_song_durations!
       @songs.each_with_index do |song, i|
@@ -61,7 +61,7 @@ module RubyCue
     def parse_titles
       unless @titles
         @titles = cuesheet_scan(:title).map{|title| title.first}
-        @titles.delete_at(0)
+        @title = @titles.delete_at(0)
       end
       @titles
     end
@@ -69,7 +69,7 @@ module RubyCue
     def parse_performers
       unless @performers
         @performers = cuesheet_scan(:performer).map{|performer| performer.first}
-        @performers.delete_at(0)
+        @performer = @performers.delete_at(0)
       end
       @performers
     end

@@ -1,6 +1,6 @@
 module RubyCue
   class Cuesheet
-    attr_reader :cuesheet, :songs, :track_duration, :performer
+    attr_reader :cuesheet, :songs, :track_duration, :performer, :title
 
     def initialize(cuesheet, track_duration=nil)
       @cuesheet = cuesheet      
@@ -61,7 +61,7 @@ module RubyCue
     def parse_titles
       unless @titles
         @titles = cuesheet_scan(:title).map{|title| title.first}
-        @titles.delete_at(0)
+        @title = @titles.delete_at(0)
       end
       @titles
     end

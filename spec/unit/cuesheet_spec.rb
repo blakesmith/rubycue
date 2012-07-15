@@ -22,6 +22,10 @@ describe RubyCue::Cuesheet do
         @cuesheet.performer.should == 'Netsky'
       end
 
+      it "has the main title" do
+        @cuesheet.title.should == 'Essential Mix (2010-10-09)'
+      end
+
       it "has the right first track" do
         @cuesheet.songs.first[:title].should == "Intro"
       end

@@ -1,6 +1,6 @@
 module RubyCue
   class Cuesheet
-    attr_reader :cuesheet, :songs, :track_duration
+    attr_reader :cuesheet, :songs, :track_duration, :performer
 
     def initialize(cuesheet, track_duration=nil)
       @cuesheet = cuesheet      
@@ -69,7 +69,7 @@ module RubyCue
     def parse_performers
       unless @performers
         @performers = cuesheet_scan(:performer).map{|performer| performer.first}
-        @performers.delete_at(0)
+        @performer = @performers.delete_at(0)
       end
       @performers
     end

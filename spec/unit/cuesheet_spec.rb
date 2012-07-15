@@ -17,6 +17,10 @@ describe RubyCue::Cuesheet do
       it "returns true if successfully parsed" do
         @cuesheet.parse!.should be_true
       end
+      
+      it "has the main performer" do
+        @cuesheet.performer.should == 'Netsky'
+      end
 
       it "has the right first track" do
         @cuesheet.songs.first[:title].should == "Intro"

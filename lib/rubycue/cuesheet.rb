@@ -42,7 +42,7 @@ module RubyCue
       end
     end
 
-    private
+  private
 
     def calculate_song_durations!
       @songs.each_with_index do |song, i|

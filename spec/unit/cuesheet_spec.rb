@@ -118,6 +118,10 @@ describe RubyCue::Cuesheet do
       it "has the right last track file" do
         @cuesheet.songs.last[:file].should == "12 - After The Gold Rush.wav"
       end
+
+      it "has genre" do
+        @cuesheet.genre.should == 'Rock'
+      end
     end
   end
 

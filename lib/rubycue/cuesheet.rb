@@ -1,6 +1,6 @@
 module RubyCue
   class Cuesheet
-    attr_reader :cuesheet, :songs, :track_duration, :performer, :title, :file
+    attr_reader :cuesheet, :songs, :track_duration, :performer, :title, :file, :genre
 
     def initialize(cuesheet, track_duration=nil)
       @cuesheet = cuesheet      
@@ -9,7 +9,8 @@ module RubyCue
         :performer => %r(PERFORMER "(.*)"),
         :title => %r(TITLE "(.*)"),
         :index => %r(INDEX \d{1,3} (\d{1,3}):(\d{1,2}):(\d{1,2})),
-        :file => %r(FILE "(.*)")
+        :file => %r(FILE "(.*)"),
+        :genre => %r(REM GENRE (.*)\b)
       }
       @track_duration = RubyCue::Index.new(track_duration) if track_duration
     end
@@ -22,6 +23,7 @@ module RubyCue
         song[:index] = parse_indices[i]
         song[:file] = parse_files[i]
       end
+      parse_genre()
       raise RubyCue::InvalidCuesheet.new("Field amounts are not all present. Cuesheet is malformed!") unless valid?
       calculate_song_durations!
       true
@@ -90,6 +92,13 @@ module RubyCue
         @file = @files.delete_at(0) if @files.size == 1
       end
       @files
+    end
+
+    def parse_genre
+      @cuesheet.scan(@reg[:genre]) do |genre|
+        @genre = genre.first
+        break
+      end
     end
 
     def cuesheet_scan(field)

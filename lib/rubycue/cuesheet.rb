@@ -23,7 +23,7 @@ module RubyCue
         song[:index] = parse_indices[i]
         song[:file] = parse_files[i]
       end
-      parse_genre()
+      parse_genre
       raise RubyCue::InvalidCuesheet.new("Field amounts are not all present. Cuesheet is malformed!") unless valid?
       calculate_song_durations!
       true

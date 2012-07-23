@@ -62,6 +62,14 @@ describe RubyCue::Cuesheet do
         @cuesheet.songs.size.should == 53
       end
 
+      it "has the main file" do
+        @cuesheet.file.should == '2010-10-09 - Essential Mix - Netsky.mp3'
+      end
+
+      it "has no tracks files" do
+        @cuesheet.songs.each { |song| song[:file].should == nil }
+      end
+
       describe "#calculate_song_duration!" do
         it "properly calculates song duration at the beginning of the track" do
           @cuesheet.songs.first[:duration].to_a.should == [1, 50, 07]
@@ -89,6 +97,30 @@ describe RubyCue::Cuesheet do
         cue = load_cuesheet('malformed')
         cuesheet = RubyCue::Cuesheet.new(cue)
         lambda { cuesheet.parse! }.should raise_error(RubyCue::InvalidCuesheet)
+      end
+    end
+
+    context "multiple files cuesheet" do
+      before do
+        @cuesheet_file = load_cuesheet("multi_file")
+        @cuesheet = RubyCue::Cuesheet.new(@cuesheet_file)
+        @cuesheet.parse!
+      end
+
+      it "has the main file" do
+        @cuesheet.file.should == nil
+      end
+
+      it "has the right first track file" do
+        @cuesheet.songs.first[:file].should == "01 - Amerigo.wav"
+      end
+
+      it "has the right last track file" do
+        @cuesheet.songs.last[:file].should == "12 - After The Gold Rush.wav"
+      end
+
+      it "has genre" do
+        @cuesheet.genre.should == 'Rock'
       end
     end
   end

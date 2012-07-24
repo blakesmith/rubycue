@@ -123,6 +123,20 @@ describe RubyCue::Cuesheet do
         @cuesheet.genre.should == 'Rock'
       end
     end
+
+    context "single file cuesheet without performer for each track" do
+      it "doesn't raise an exception if have main performer" do
+        cuesheet_file = load_cuesheet("single_file_performer")
+        cuesheet = RubyCue::Cuesheet.new(cuesheet_file)
+        lambda { cuesheet.parse! }.should_not raise_error(RubyCue::InvalidCuesheet)
+      end
+
+      it "raises an exception if don't have main performer" do
+        cuesheet_file = load_cuesheet("single_file_wo_performer")
+        cuesheet = RubyCue::Cuesheet.new(cuesheet_file)
+        lambda { cuesheet.parse! }.should raise_error(RubyCue::InvalidCuesheet)
+      end
+    end
   end
 
   describe "#position" do

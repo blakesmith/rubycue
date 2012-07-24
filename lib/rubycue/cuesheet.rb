@@ -40,7 +40,8 @@ module RubyCue
 
     def valid?
       @songs.all? do |song|
-        [:performer, :track, :index, :title].all? do |key|
+        valid_perfomer = (@performer if @file) || song[:performer]
+        valid_perfomer && [:track, :index, :title].all? do |key|
           song[key] != nil
         end
       end
